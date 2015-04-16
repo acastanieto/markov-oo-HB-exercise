@@ -65,8 +65,67 @@ class SimpleMarkovGenerator(object):
 
             else:
                 markov_string += "."
-               # print markov_string
+
                 return markov_string
+
+#  one way:  The TweetMarkovGenerator will have its own make_text method that inherits
+#  the make_text method from the Parent class but also tweaks it so that
+#  the Markov text generated ends at 140 characters.  
+
+class TweetableMarkovGeneratorQuick(SimpleMarkovGenerator):
+    """Takes in text input, and generates a tweetable (140 characters or less) 
+    Markov string based on that input using a Markov Chain algorithm."""
+
+    def make_text(self, chains): 
+        """ This method generates a long-format string using the method defined in 
+        the SimpleMarkovGenerator superclass, then returns a shortened version that
+        is 140 characters or less."""
+
+        unaltered_string = super(TweetableMarkovGenerator, self).make_text(chains)
+        return unaltered_string[:139] + "." 
+
+class TweetableMarkovGenerator(SimpleMarkovGenerator):
+    """Takes in text input, and generates a tweetable (140 characters or less) 
+    Markov string based on that input using a Markov Chain algorithm."""
+
+    def make_text(self, chains): 
+        """ This method generates a long-format string using the method defined in 
+        the SimpleMarkovGenerator superclass, then returns a shortened version that
+        is 140 characters or less."""
+
+        unaltered_string = super(TweetableMarkovGenerator, self).make_text(chains)
+
+        shortened_string = ""    
+
+        if len(unaltered_string) < 140:
+            return unaltered_string
+
+        else:
+            unaltered_words = unaltered_string.split(" ")
+
+            for word in unaltered_words:
+                if len(shortened_string) + len(word) + 1 >= 140:
+                    shortened_string += "."
+                    return shortened_string
+
+                else:
+                    shortened_string = shortened_string + " " + word
+
+
+
+
+# another way uses its own completely new make_text method that does not inherit
+# anything from the Parent class.  
+
+# class TweetableMarkovGenerator(SimpleMarkovGenerator):
+#     """Takes in text input, and generates a tweetable (140 characters or less) 
+#     Markov string based on that input using a Markov Chain algorithm."""
+
+#     def make_text(self, chains): 
+#         """ This method 
+
+
+
 
         
 if __name__ == "__main__":
@@ -76,3 +135,7 @@ if __name__ == "__main__":
     print simple.make_text(simple.make_chains(file_name))
     print "\n"
     print simple.make_text(simple.make_chains(file_name))
+    # tweet = TweetableMarkovGenerator()
+    # print tweet.make_text(tweet.make_chains(file_name))
+    # qtweet = TweetableMarkovGeneratorQuick()
+    # print qtweet.make_text(qtweet.make_chains(file_name))
