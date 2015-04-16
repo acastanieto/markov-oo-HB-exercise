@@ -68,10 +68,12 @@ class SimpleMarkovGenerator(object):
 
                 return markov_string
 
+
+
+
 #  one way:  The TweetMarkovGenerator will have its own make_text method that inherits
 #  the make_text method from the Parent class but also tweaks it so that
 #  the Markov text generated ends at 140 characters.  
-
 class TweetableMarkovGeneratorQuick(SimpleMarkovGenerator):
     """Takes in text input, and generates a tweetable (140 characters or less) 
     Markov string based on that input using a Markov Chain algorithm."""
@@ -117,12 +119,40 @@ class TweetableMarkovGenerator(SimpleMarkovGenerator):
 # another way uses its own completely new make_text method that does not inherit
 # anything from the Parent class.  
 
-# class TweetableMarkovGenerator(SimpleMarkovGenerator):
-#     """Takes in text input, and generates a tweetable (140 characters or less) 
-#     Markov string based on that input using a Markov Chain algorithm."""
+class TweetableMarkovGeneratorQuick(SimpleMarkovGenerator):
+    """Takes in text input, and generates a tweetable (140 characters or less) 
+    Markov string based on that input using a Markov Chain algorithm."""
 
-#     def make_text(self, chains): 
-#         """ This method 
+    def make_text(self, chains):
+        """Takes dictionary of markov chains; returns random text that is
+        140 characters long or less."""
+            
+        rand_key = random.choice(chains.keys())
+        rand_value_word = random.choice(chains[rand_key])
+        key1, key2 = rand_key
+        
+        markov_string = key1 + " " + key2 + " " + rand_value_word
+        
+        while rand_key in chains:
+
+
+            new_bigram = (key2, rand_value_word)
+
+            if new_bigram in chains:
+                rand_new_word = random.choice(chains[new_bigram])
+                if len(markov_string + rand_new_word) + 1 >= 140:
+                    return markov_string + "."
+                else:
+                    markov_string += " " + rand_new_word
+                    key2 = rand_value_word
+                    rand_value_word = rand_new_word 
+                    rand_key = new_bigram           
+
+            else:
+                markov_string += "."
+                return markov_string
+
+    
 
 
 
@@ -132,10 +162,14 @@ if __name__ == "__main__":
      
     script, file_name = sys.argv
     simple = SimpleMarkovGenerator()
-    print simple.make_text(simple.make_chains(file_name))
+    # print simple.make_text(simple.make_chains(file_name))
+    # print "\n"
+    # print simple.make_text(simple.make_chains(file_name))
+    tweet = TweetableMarkovGenerator()
     print "\n"
-    print simple.make_text(simple.make_chains(file_name))
-    # tweet = TweetableMarkovGenerator()
-    # print tweet.make_text(tweet.make_chains(file_name))
-    # qtweet = TweetableMarkovGeneratorQuick()
-    # print qtweet.make_text(qtweet.make_chains(file_name))
+    print "TweetableMarkovGenerator"
+    print tweet.make_text(tweet.make_chains(file_name))
+    print "\n"
+    qtweet = TweetableMarkovGeneratorQuick()
+    print "TweetableMarkovGeneratorQuick"
+    print qtweet.make_text(qtweet.make_chains(file_name))
