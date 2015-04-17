@@ -166,7 +166,7 @@ class TweetableMarkovGenerator(SimpleMarkovGenerator):
             if len(" ".join(markov_list) + rand_new_word) < 139:
                 markov_list.append(rand_new_word)
                 rand_key = (rand_key[1], rand_new_word)
-            elif rand_new_word[-1] in '.?"!':
+            elif rand_new_word[-1] in '.?!':
                 # print rand_new_word[-1]
                 markov_list.append(rand_new_word)
                 return " ".join(markov_list)
