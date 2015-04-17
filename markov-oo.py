@@ -40,7 +40,7 @@ class SimpleMarkovGenerator(object):
 
         key1 = "a"
 
-        while key1[0].islower():
+        while not (key1[0].isupper() and key1[0].isalpha):
             rand_key = random.choice(chains.keys())        
             key1, key2 = rand_key
         
