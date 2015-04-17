@@ -148,10 +148,12 @@ class TweetableMarkovGeneratorQuick(SimpleMarkovGenerator):
             rand_new_word = random.choice(chains[rand_key])
             if len(" ".join(markov_list) + rand_new_word) < 139:
                 markov_list.append(rand_new_word)
+                rand_key = (rand_key[1], rand_new_word)
             else:   
                 return " ".join(markov_list) + ".", len(" ".join(markov_list) + ".")
+
         return " ".join(markov_list) + ".", len(" ".join(markov_list) + ".")
-            rand_key = (rand_key[1], rand_new_word)
+            
 
            
         
